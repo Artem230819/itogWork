@@ -1,22 +1,26 @@
 package main
 
 import (
-	"Anoshkin/app/controller"
+	"github.com/Artem230819/itogWork/app/controller"
+	"github.com/Artem230819/itogWork/server"
 	"github.com/julienschmidt/httprouter"
-	"log"
 	"net/http"
 )
 
-func main()  {
+func main() {
+	err := server.InitDB()
+	if err != nil {
+		panic(err)
+	}
 	//создаем и запускаем в работу роутер для обслуживания запросов
 	r := httprouter.New()
 	routes(r)
 
 	//прикрепляемся к хосту и свободному порту для приема и обслуживания входящих запросов
 	//вторым параметром передается роутер, который будет работать с запросами
-	err := http.ListenAndServe("localhost:4444", r)
+	err = http.ListenAndServe("localhost:4444", r)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
 func routes(r *httprouter.Router) {
@@ -24,5 +28,6 @@ func routes(r *httprouter.Router) {
 	r.ServeFiles("/public/*filepath", http.Dir("public"))
 	//что следует выполнять при входящих запросах указанного типа и по указанному адресу
 	r.GET("/", controller.StartPage)
-	r.GET("/posts", controller.GetPosts)
+	r.GET("/create", controller.CreatePosts)
+	r.POST("/create/add", controller.AddPost)
 }

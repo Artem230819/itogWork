@@ -1,21 +1,25 @@
 package modal
 
+import "github.com/Artem230819/itogWork/server"
+
 type Post struct {
-	Id       int
-	Text     string
+	Id   int
+	Text string
+	Date string `db:"date_completion"`
 }
 
-func GetAllPosts () (posts []Post, err error) {
-	posts = []Post{
-		{1,"Джон"},
-		{2,"Говард"},
-		{3,"Джек"},
-		{4,"Лизель"},
-		{5,"Джейн"},
-		{6,"Мартин"},
-		{7,"Джон"},
-		{8,"Сэмвелл"},
-		{9,"Гермиона"},
-	}
+func NewPost(text string) *Post {
+	return &Post{Text: text}
+}
+
+func GetAllPosts() (posts []Post, err error) {
+	query := `SELECT * FROM posts`
+	err = server.Db.Select(&posts, query)
+	return
+}
+
+func (p *Post) Add() (err error) {
+	query := `INSERT INTO posts (text) VALUES (?)`
+	_, err = server.Db.Exec(query, p.Text)
 	return
 }

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+</head>
+<body>
+<h2>Главная страница</h2>
+{{  range . }}
+<p>{{ .Date }} <br> {{ .Text }} </p>
+{{ end }}
+<a href="/create">Создать пост</a>
+</body>
+</html>
